@@ -20,7 +20,7 @@ const server = http.createServer(app);
 
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: "https://intervieu-assignment-live.netlify.app/",
     methods: ["GET", "POST"]
   }
 });
@@ -165,30 +165,6 @@ app.get('/api/active-students', async (req, res) => {
 let activeQuestion = null;
 let responses = {};
 
-
-app.post('/api/questions', async (req, res) => {
-  try {
-    const { question, options, timer, createdBy } = req.body;
-
-    const unique_id = Date.now().toString(); // Use timestamp as string
-
-    const poll = new Poll({
-      question,
-      options,
-      timer,
-      createdBy,
-      isActive: true,
-      unique_id
-    });
-
-    await poll.save();
-
-    res.json({ success: true, pollId: poll._id, unique_id });
-  } catch (err) {
-    console.error('Error creating poll:', err);
-    res.status(500).json({ error: 'Failed to create poll' });
-  }
-});
 
 
 // Helper function to check if poll is active based on timestamp difference
@@ -416,6 +392,7 @@ app.post('/api/kickParticipant', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
